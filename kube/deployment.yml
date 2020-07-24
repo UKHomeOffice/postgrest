@@ -48,15 +48,15 @@ spec:
         env:
         - name: POSTGREST_NAME
           value: "{{.POSTGREST_NAME}}"
+        - name: PGRST_DB_ANON_ROLE
+          value: "{{.DB_REF_REFERENCE_ANON_USERNAME}}"
+        - name: PGRST_DB_SCHEMA
+          value: "{{.DB_REF_REFERENCE_SCHEMA}}"
         - name: PGRST_DB_URI
           valueFrom:
             secretKeyRef:
               name: {{.POSTGREST_NAME}}
               key: dbUri
-        - name: PGRST_DB_SCHEMA
-          value: {{.DB_REF_REFERENCE_SCHEMA}}
-        - name: PGRST_DB_ANON_ROLE
-          value: {{.DB_REF_REFERENCE_ANON_USERNAME}}
         - name: PGRST_SERVER_PROXY_URI
           value: "http://127.0.0.1:3000/"
         - name: PGRST_JWT_SECRET
