@@ -3,19 +3,11 @@ kind: Certificate
 metadata:
   name: {{ .POSTGREST_NAME }}-pod-cert
 spec:
-  secretName: {{ .POSTGREST_NAME }}-pod-cert
-  duration: 2160h # 90d
-  renewBefore: 360h # 15d
-  isCA: false
-  keySize: 2048
-  keyAlgorithm: rsa
-  keyEncoding: pkcs1
+  secretName: {{.POSTGREST_NAME}}-pod-cmio
   issuerRef:
     name: platform-ca
     kind: ClusterIssuer
-  usages:
-    - server auth
-    - client auth
+  commonName: {{.POSTGREST_NAME}}.{{.KUBE_NAMESPACE}}.svc.cluster.local
   dnsNames:
     - {{ .POSTGREST_NAME }}
     - {{ .POSTGREST_NAME }}.{{ .KUBE_NAMESPACE }}
