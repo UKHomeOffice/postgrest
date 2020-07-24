@@ -49,9 +49,9 @@ spec:
         - name: POSTGREST_NAME
           value: "{{.POSTGREST_NAME}}"
         - name: PGRST_DB_ANON_ROLE
-          value: "{{.DB_REF_REFERENCE_ANON_USERNAME}}"
+          value: {{.ANON_USERNAME}}
         - name: PGRST_DB_SCHEMA
-          value: "{{.DB_REF_REFERENCE_SCHEMA}}"
+          value: {{.SCHEMA}}
         - name: PGRST_DB_URI
           valueFrom:
             secretKeyRef:
