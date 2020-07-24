@@ -20,6 +20,13 @@ spec:
       containers:
       - name: {{.POSTGREST_NAME}}-proxy
         image: "{{.NGINX_IMAGE}}:{{.NGINX_TAG}}"
+        resources:
+          limits:
+            cpu: "1"
+            memory: "1024Mi"
+          requests:
+            cpu: "50m"
+            memory: "512Mi"
         env:
         - name: PROXY_SERVICE_HOST
           value: "127.0.0.1"
@@ -45,6 +52,13 @@ spec:
       - name: "{{.POSTGREST_NAME}}"
         image: "{{.POSTGREST_IMAGE}}:{{.POSTGREST_TAG}}"
         imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: "4"
+            memory: "2038Mi"
+          requests:
+            cpu: "2"
+            memory: "1024Mi"
         env:
         - name: POSTGREST_NAME
           value: "{{.POSTGREST_NAME}}"
