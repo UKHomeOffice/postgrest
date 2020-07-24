@@ -31,9 +31,9 @@ pipeline:
       - source: NGINX_TAG
         target: NGINX_TAG
       - source: DEV_DB_REF_REFERENCE_SCHEMA
-        target: SCHEMA
+        target: DB_REF_REFERENCE_SCHEMA
       - source: DEV_DB_REF_REFERENCE_ANON_USERNAME
-        target: ANON_USERNAME
+        target: DB_REF_REFERENCE_ANON_USERNAME
       - source: DEV_POSTGREST_URI
         target: POSTGREST_URI
       - source: DEV_KEYCLOAK_JWT
