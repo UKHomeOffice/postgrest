@@ -30,16 +30,8 @@ pipeline:
         target: DB_REF_REFERENCE_SCHEMA
       - source: DEV_DB_REF_REFERENCE_ANON_USERNAME
         target: DB_REF_REFERENCE_ANON_USERNAME
-      - source: DEV_DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
-        target: DB_REF_REFERENCE_AUTHENTICATOR_USERNAME
-      - source: DEV_DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
-        target: DB_REF_REFERENCE_AUTHENTICATOR_PASSWORD
-      - source: DEV_DB_REF_HOSTNAME
-        target: DB_REF_HOSTNAME
-      - source: DEV_DB_REF_REFERENCE_DBNAME
-        target: DB_REF_REFERENCE_DBNAME
-      - source: DEV_DB_REF_OPTIONS
-        target: DB_REF_OPTIONS
+      - source: DEV_POSTGREST_URI
+        target: POSTGREST_UR
       - source: DEV_KEYCLOAK_JWT
         target: KEYCLOAK_JWT
       - source: DEV_KUBE_SERVER
