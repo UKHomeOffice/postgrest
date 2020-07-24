@@ -30,9 +30,9 @@ pipeline:
         target: NGINX_IMAGE
       - source: NGINX_TAG
         target: NGINX_TAG
-      - source: DEV_DB_REF_REFERENCE_SCHEMA
+      - source: DB_REF_REFERENCE_SCHEMA
         target: DB_REF_REFERENCE_SCHEMA
-      - source: DEV_DB_REF_REFERENCE_ANON_USERNAME
+      - source: DB_REF_REFERENCE_ANON_USERNAME
         target: DB_REF_REFERENCE_ANON_USERNAME
       - source: DEV_POSTGREST_URI
         target: POSTGREST_URI
@@ -52,6 +52,5 @@ pipeline:
       - kd --insecure-skip-tls-verify -f kube/deployment.yml
       - kd --insecure-skip-tls-verify -f kube/ingress.yml
     when:
-      event: deployment
-      environment: dev
+      event: push
       branch: master
