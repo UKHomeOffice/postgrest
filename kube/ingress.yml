@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: {{POSTGREST_NAME}}
+  name: {{.POSTGREST_NAME}}
   labels:
     cert-manager.io/solver: http01
   annotations:
@@ -15,14 +15,14 @@ metadata:
     ingress.kubernetes.io/proxy-body-size: "300m"
 spec:
   rules:
-  - host: {{POSTGREST_URL}}
+  - host: {{.POSTGREST_URL}}
     http:
       paths:
       - backend:
-          serviceName: {{POSTGREST_NAME}}
+          serviceName: {{.POSTGREST_NAME}}
           servicePort: 10443
         path: /
   tls:
   - hosts:
-    - {{POSTGREST_URL}}
-    secretName: {{POSTGREST_URL}}-cmio
+    - {{.POSTGREST_URL}}
+    secretName: {{.POSTGREST_URL}}-cmio
