@@ -83,4 +83,4 @@ spec:
       volumes:
       - name: certs
         secret:
-          secretName: "{{POSTGREST_NAME}}-pod-cmio"
+          secretName: "{{.POSTGREST_NAME}}-pod-cmio"
