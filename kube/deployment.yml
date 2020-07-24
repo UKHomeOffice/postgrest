@@ -68,6 +68,8 @@ spec:
           value: {{.DB_REF_REFERENCE_SCHEMA}}
         - name: PGRST_JWT_AUD
           value: {{.POSTGREST_AUD}}
+        - name: PGRST_ROLE_CLAIM_KEY
+          value: {{.POSTGREST_ROLE_CLAIM_KEY}}
         - name: PGRST_DB_URI
           valueFrom:
             secretKeyRef:

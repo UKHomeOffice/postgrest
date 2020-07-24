@@ -40,6 +40,8 @@ pipeline:
         target: POSTGREST_URL
       - source: DEV_POSTGREST_AUD
         target: POSTGREST_AUD
+      - source: DEV_POSTGREST_ROLE_CLAIM_KEY
+        target: POSTGREST_ROLE_CLAIM_KEY
       - source: DEV_KEYCLOAK_JWT
         target: KEYCLOAK_JWT
       - source: DEV_KUBE_SERVER
