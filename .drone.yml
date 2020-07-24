@@ -24,6 +24,8 @@ pipeline:
         target: POSTGREST_NAME
       - source: DEV_POSTGREST_IMAGE
         target: POSTGREST_IMAGE
+      - source: DEV_POSTGREST_TAG
+        target: POSTGREST_TAG
       - source: NGINX_IMAGE
         target: NGINX_IMAGE
       - source: NGINX_TAG
