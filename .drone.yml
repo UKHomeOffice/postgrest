@@ -36,6 +36,8 @@ pipeline:
         target: DB_REF_REFERENCE_ANON_USERNAME
       - source: DEV_POSTGREST_URI
         target: POSTGREST_URI
+      - source: DEV_POSTGREST_URL
+        target: POSTGREST_URL
       - source: DEV_KEYCLOAK_JWT
         target: KEYCLOAK_JWT
       - source: DEV_KUBE_SERVER
