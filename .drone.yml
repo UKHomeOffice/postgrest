@@ -38,6 +38,8 @@ pipeline:
         target: POSTGREST_URI
       - source: DEV_POSTGREST_URL
         target: POSTGREST_URL
+      - source: DEV_POSTGREST_AUD
+        target: POSTGREST_AUD
       - source: DEV_KEYCLOAK_JWT
         target: KEYCLOAK_JWT
       - source: DEV_KUBE_SERVER

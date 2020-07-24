@@ -66,6 +66,8 @@ spec:
           value: {{.DB_REF_REFERENCE_ANON_USERNAME}}
         - name: PGRST_DB_SCHEMA
           value: {{.DB_REF_REFERENCE_SCHEMA}}
+        - name: PGRST_JWT_AUD
+          value: {{.POSTGREST_AUD}}
         - name: PGRST_DB_URI
           valueFrom:
             secretKeyRef:
