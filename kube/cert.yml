@@ -1,0 +1,26 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: {{ POSTGREST_NAME }}-pod-cert
+spec:
+  secretName: {{ POSTGREST_NAME }}-pod-cert
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  isCA: false
+  keySize: 2048
+  keyAlgorithm: rsa
+  keyEncoding: pkcs1
+  issuerRef:
+    name: platform-ca
+    kind: ClusterIssuer
+  usages:
+    - server auth
+    - client auth
+  dnsNames:
+    - {{ POSTGREST_NAME }}
+    - {{ POSTGREST_NAME }}.{{ .KUBE_NAMESPACE }}
+    - {{ POSTGREST_NAME }}.{{ .KUBE_NAMESPACE }}.svc
+    - {{ POSTGREST_NAME }}.{{ .KUBE_NAMESPACE }}.svc.cluster.local
+    - localhost
+  ipAddresses:
+    - 127.0.0.1
