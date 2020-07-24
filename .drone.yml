@@ -22,6 +22,8 @@ pipeline:
     secrets:
       - source: DEV_POSTGREST_NAME
         target: POSTGREST_NAME
+      - source: DEV_POSTGREST_IMAGE
+        target: POSTGREST_IMAGE
       - source: NGINX_IMAGE
         target: NGINX_IMAGE
       - source: NGINX_TAG
