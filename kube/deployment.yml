@@ -93,7 +93,7 @@ spec:
         livenessProbe:
           exec:
             command:
-              - "/bin/curl -Ik https://localhost:10443"
+              - /bin/curl -Ik https://localhost:10443
           initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 5
@@ -101,7 +101,7 @@ spec:
         readinessProbe:
           exec:
             command:
-              - "/bin/curl -Ik https://localhost:10443"
+              - /bin/curl -Ik https://localhost:10443
           initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 5
