@@ -92,14 +92,20 @@ spec:
           runAsNonRoot: true
         livenessProbe:
           exec:
-            command: ["/bin/curl -I https://localhost:3000"]
+            command:
+              - /bin/curl
+              - -I
+              - https://localhost:3000
           initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 5
           successThreshold: 1
         readinessProbe:
           exec:
-            command: ["/bin/curl -I https://localhost:3000"]
+            command:
+              - /bin/curl
+              - -I
+              - https://localhost:3000
           initialDelaySeconds: 30
           periodSeconds: 5
           timeoutSeconds: 5
