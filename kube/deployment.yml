@@ -40,6 +40,11 @@ spec:
           value: "FALSE"
         - name: STATSD_METRICS
           value: "FALSE"
+        - name: ADD_NGINX_HTTP_CFG
+          value: |
+            proxy_cache_path /tmp/cache keys_zone=static:500m;
+            proxy_cache_valid 200 302 60m;
+            proxy_cache_valid 404      1m;
         - name: ADD_NGINX_LOCATION_CFG
           value: |
             client_max_body_size      300m;
