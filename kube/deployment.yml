@@ -22,11 +22,11 @@ spec:
         image: "{{.NGINX_IMAGE}}:{{.NGINX_TAG}}"
         resources:
           limits:
+            cpu: "2"
+            memory: "2048Mi"
+          requests:
             cpu: "1"
             memory: "1024Mi"
-          requests:
-            cpu: "50m"
-            memory: "512Mi"
         env:
         - name: PROXY_SERVICE_HOST
           value: "127.0.0.1"
@@ -49,6 +49,26 @@ spec:
           value: |
             client_max_body_size      300m;
             proxy_cache static;
+        livenessProbe:
+          exec:
+            command:
+              - /bin/curl
+              - -I
+              - http://127.0.0.1:3000
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 5
+          successThreshold: 1
+        readinessProbe:
+          exec:
+            command:
+              - /bin/curl
+              - -I
+              - http://127.0.0.1:3000
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 5
+          successThreshold: 1
         ports:
         - name: https
           containerPort: 10443
@@ -61,7 +81,7 @@ spec:
         resources:
           limits:
             cpu: "4"
-            memory: "2038Mi"
+            memory: "2048Mi"
           requests:
             cpu: "2"
             memory: "1024Mi"
@@ -83,6 +103,12 @@ spec:
               key: dbUri
         - name: PGRST_SERVER_PROXY_URI
           value: "http://127.0.0.1:3000/"
+        - name: PGRST_DB_POOL
+          value: "30"
+        - name: PGRST_DB_POOL_TIMEOUT
+          value: "20"
+        - name: PGRST_MAX_ROWS
+          value: "50"
         - name: PGRST_JWT_SECRET
           valueFrom:
             secretKeyRef:
@@ -90,26 +116,6 @@ spec:
               key: jwtSecret
         securityContext:
           runAsNonRoot: true
-        livenessProbe:
-          exec:
-            command:
-              - /bin/curl
-              - -I
-              - https://localhost:3000
-          initialDelaySeconds: 30
-          periodSeconds: 5
-          timeoutSeconds: 5
-          successThreshold: 1
-        readinessProbe:
-          exec:
-            command:
-              - /bin/curl
-              - -I
-              - https://localhost:3000
-          initialDelaySeconds: 30
-          periodSeconds: 5
-          timeoutSeconds: 5
-          successThreshold: 1
       volumes:
       - name: certs
         secret:
