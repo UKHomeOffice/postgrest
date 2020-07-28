@@ -108,7 +108,7 @@ spec:
         - name: PGRST_DB_POOL_TIMEOUT
           value: "20"
         - name: PGRST_MAX_ROWS
-          value: "50"
+          value: "1000"
         - name: PGRST_JWT_SECRET
           valueFrom:
             secretKeyRef:
