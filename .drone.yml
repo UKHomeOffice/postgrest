@@ -46,6 +46,25 @@ steps:
     target:
     - secrets
 
+- name: synch_production_secrets
+  pull: if-not-exists
+  image: quay.io/ukhomeofficedigital/cop-secrets
+  environment:
+    AWS_ACCESS_KEY_ID:
+      from_secret: PRODUCTION_DRONE_AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: PRODUCTION_DRONE_AWS_SECRET_ACCESS_KEY
+    DEPLOY_ENV: production
+    DRONE_SERVER: https://drone-gh.acp.homeoffice.gov.uk
+    DRONE_TOKEN:
+      from_secret: DRONE_V1_PUBLIC_TOKEN
+    DRONE_VERSION: ${DRONE_SYSTEM_VERSION}
+  when:
+    event:
+    - promote
+    target:
+    - secrets
+
 - name: deploy_to_dev
   pull: if-not-exists
   image: quay.io/ukhomeofficedigital/kd
@@ -139,6 +158,73 @@ steps:
     - promote
     target:
     - staging
+
+- name: deploy_to_production
+  pull: if-not-exists
+  image: quay.io/ukhomeofficedigital/kd
+  commands:
+  - kd --insecure-skip-tls-verify -f kube/cert.yml
+  - kd --insecure-skip-tls-verify -f kube/secret.yml
+  - kd --insecure-skip-tls-verify -f kube/network-policy.yml
+  - kd --insecure-skip-tls-verify -f kube/service.yml
+  - kd --insecure-skip-tls-verify -f kube/deployment.yml
+  - kd --insecure-skip-tls-verify -f kube/ingress.yml
+  environment:
+    DB_REF_REFERENCE_ANON_USERNAME:
+      from_secret: DB_REF_REFERENCE_ANON_USERNAME
+    DB_REF_REFERENCE_SCHEMA:
+      from_secret: DB_REF_REFERENCE_SCHEMA
+    KEYCLOAK_JWT:
+      from_secret: PRODUCTION_KEYCLOAK_JWT
+    KUBE_NAMESPACE:
+      from_secret: PRODUCTION_KUBE_NAMESPACE_PRIVATE_COP
+    KUBE_SERVER:
+      from_secret: PRODUCTION_KUBE_SERVER
+    KUBE_TOKEN:
+      from_secret: PRODUCTION_KUBE_TOKEN
+    NGINX_IMAGE:
+      from_secret: NGINX_IMAGE
+    NGINX_TAG:
+      from_secret: NGINX_TAG
+    POSTGREST_AUD:
+      from_secret: PRODUCTION_POSTGREST_AUD
+    POSTGREST_IMAGE:
+      from_secret: PRODUCTION_POSTGREST_IMAGE
+    POSTGREST_NAME:
+      from_secret: PRODUCTION_POSTGREST_NAME
+    POSTGREST_ROLE_CLAIM_KEY:
+      from_secret: PRODUCTION_POSTGREST_ROLE_CLAIM_KEY
+    POSTGREST_TAG:
+      from_secret: PRODUCTION_POSTGREST_TAG
+    POSTGREST_URI:
+      from_secret: PRODUCTION_POSTGREST_URI
+    POSTGREST_URL:
+      from_secret: PRODUCTION_POSTGREST_URL
+  when:
+    event:
+    - promote
+    target:
+    - production
+
+- name: notify
+  pull: if-not-exists
+  image: plugins/slack
+  settings:
+    channel: cop-deployments
+    template: "{{#build.deployTo}}\n  *{{repo.name}} - Build {{build.number}} - {{uppercasefirst build.deployTo}} - {{uppercase build.status}}*\n  {{build.link}}\n{{else}}\n  *{{repo.name}} - Build {{build.number}} - Development - {{uppercase build.status}}*\n  {{build.link}}\n{{/build.deployTo}}\n"
+    username: Drone Build Watcher
+  environment:
+    SLACK_WEBHOOK:
+      from_secret: SLACK_WEBHOOK
+  when:
+    branch:
+    - master
+    event:
+    - push
+    - promote
+    status:
+    - success
+    - failure
 
 services:
 - name: docker
