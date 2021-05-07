@@ -27,6 +27,25 @@ steps:
     target:
     - secrets
 
+- name: synch_sit_secrets
+  pull: if-not-exists
+  image: quay.io/ukhomeofficedigital/cop-secrets
+  environment:
+    AWS_ACCESS_KEY_ID:
+      from_secret: DEV_DRONE_AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: DEV_DRONE_AWS_SECRET_ACCESS_KEY
+    DEPLOY_ENV: sit
+    DRONE_SERVER: https://drone-gh.acp.homeoffice.gov.uk
+    DRONE_TOKEN:
+      from_secret: DRONE_V1_PUBLIC_TOKEN
+    DRONE_VERSION: ${DRONE_SYSTEM_VERSION}
+  when:
+    event:
+    - promote
+    target:
+    - secrets
+
 - name: synch_staging_secrets
   pull: if-not-exists
   image: quay.io/ukhomeofficedigital/cop-secrets
@@ -111,6 +130,53 @@ steps:
     - master
     event:
     - push
+
+- name: deploy_to_sit
+  pull: if-not-exists
+  image: quay.io/ukhomeofficedigital/kd
+  commands:
+  - kd --insecure-skip-tls-verify -f kube/cert.yml
+  - kd --insecure-skip-tls-verify -f kube/secret.yml
+  - kd --insecure-skip-tls-verify -f kube/network-policy.yml
+  - kd --insecure-skip-tls-verify -f kube/service.yml
+  - kd --insecure-skip-tls-verify -f kube/deployment.yml
+  - kd --insecure-skip-tls-verify -f kube/ingress.yml
+  environment:
+    DB_REF_REFERENCE_ANON_USERNAME:
+      from_secret: DB_REF_REFERENCE_ANON_USERNAME
+    DB_REF_REFERENCE_SCHEMA:
+      from_secret: DB_REF_REFERENCE_SCHEMA
+    KEYCLOAK_JWT:
+      from_secret: SIT_KEYCLOAK_JWT
+    KUBE_NAMESPACE:
+      from_secret: SIT_KUBE_NAMESPACE_COP
+    KUBE_SERVER:
+      from_secret: SIT_KUBE_SERVER
+    KUBE_TOKEN:
+      from_secret: SIT_KUBE_TOKEN
+    NGINX_IMAGE:
+      from_secret: NGINX_IMAGE
+    NGINX_TAG:
+      from_secret: NGINX_TAG
+    POSTGREST_AUD:
+      from_secret: SIT_POSTGREST_AUD
+    POSTGREST_IMAGE:
+      from_secret: SIT_POSTGREST_IMAGE
+    POSTGREST_NAME:
+      from_secret: SIT_POSTGREST_NAME
+    POSTGREST_ROLE_CLAIM_KEY:
+      from_secret: SIT_POSTGREST_ROLE_CLAIM_KEY
+    POSTGREST_TAG:
+      from_secret: SIT_POSTGREST_TAG
+    POSTGREST_URI:
+      from_secret: SIT_POSTGREST_URI
+    POSTGREST_URL:
+      from_secret: SIT_POSTGREST_URL
+  when:
+    event:
+    - promote
+    target:
+    - sit
 
 - name: deploy_to_staging
   pull: if-not-exists
